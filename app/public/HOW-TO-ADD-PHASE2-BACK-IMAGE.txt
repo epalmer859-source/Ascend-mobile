@@ -1,0 +1,19 @@
+PHASE II BACK-OF-TUBE IMAGE
+==========================
+
+To show the back of the Phase II tube in the product slideshow:
+
+1. Find your image file (the photo of the back of the tube).
+
+2. Copy that file.
+
+3. Rename the copy to exactly:
+   phase-ii-tube-back.png
+
+4. Put it in THIS folder (the same folder as this file).
+   Full path:
+   c:\Users\talis\Downloads\Kimi_Agent_React Site Cart Checkout (6)\app\public\
+
+5. Restart your dev server (stop it and run "npm run dev" again in the app folder).
+
+Done. When you open Phase II and click the arrow to see the second slide, your image will appear.
