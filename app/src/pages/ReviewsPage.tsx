@@ -126,7 +126,7 @@ export function ReviewsPage() {
 
         {visibleCount < filtered.length && (
           <div className="text-center mt-10">
-            <button 
+            <button
               onClick={() => setVisibleCount(c => c + 24)}
               className="btn-gold"
             >

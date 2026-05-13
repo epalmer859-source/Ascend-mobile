@@ -46,6 +46,8 @@ export function HomePage({ setPage }: HomePageProps) {
   const [modalOpen, setModalOpen] = useState<number | null>(null);
   const protocolScrollRef = useRef<HTMLDivElement>(null);
   const [protocolArrows, setProtocolArrows] = useState({ left: false, right: true });
+  const [reviewIndex, setReviewIndex] = useState(0);
+  const homeReviews = [...getUserReviews().slice().reverse(), ...ALL_REVIEWS].slice(0, 6);
 
   const updateProtocolArrows = () => {
     const el = protocolScrollRef.current;
@@ -401,8 +403,60 @@ export function HomePage({ setPage }: HomePageProps) {
             <span className="text-white text-sm" style={{ fontFamily: 'var(--header)' }}>from 486 reviews</span>
           </div>
         </FadeIn>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 max-w-6xl mx-auto">
-          {[...getUserReviews().slice().reverse(), ...ALL_REVIEWS].slice(0, 6).map((review) => (
+
+        {/* Mobile Carousel */}
+        <div className="md:hidden max-w-6xl mx-auto">
+          <div className="glass-card flex flex-col">
+            <div className="flex justify-between items-center mb-3">
+              <div>
+                <strong className="text-sm">{homeReviews[reviewIndex].name}</strong>
+                {homeReviews[reviewIndex].verified && (
+                  <span className="text-xs text-[#E2CDB9] ml-2">✓ Verified</span>
+                )}
+              </div>
+              <span className="text-xs text-white/60">{homeReviews[reviewIndex].time}</span>
+            </div>
+            <Stars count={homeReviews[reviewIndex].star} />
+            {homeReviews[reviewIndex].title && (
+              <p className="text-white/90 text-sm mt-3 font-medium">{homeReviews[reviewIndex].title}</p>
+            )}
+            <p className="text-white/80 text-sm mt-3 leading-relaxed">{homeReviews[reviewIndex].text}</p>
+            <p className="text-xs text-[#E2CDB9] mt-3 italic">Purchased: {homeReviews[reviewIndex].product}</p>
+          </div>
+
+          <div className="flex items-center justify-center gap-6 mt-6">
+            <button
+              onClick={() => setReviewIndex(i => Math.max(i - 1, 0))}
+              disabled={reviewIndex === 0}
+              className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center disabled:opacity-30 transition-opacity"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+            <span className="text-sm text-white/60">{reviewIndex + 1} / {homeReviews.length}</span>
+            <button
+              onClick={() => setReviewIndex(i => Math.min(i + 1, homeReviews.length - 1))}
+              disabled={reviewIndex === homeReviews.length - 1}
+              className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center disabled:opacity-30 transition-opacity"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
+          </div>
+
+          {reviewIndex >= 2 && (
+            <div className="text-center mt-6">
+              <button
+                onClick={() => { setPage('Reviews'); window.scrollTo(0,0); }}
+                className="btn-gold text-sm"
+              >
+                See all {getUserReviews().length + ALL_REVIEWS.length} reviews <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Desktop Grid */}
+        <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-5 max-w-6xl mx-auto">
+          {homeReviews.map((review) => (
             <FadeIn key={review.id}>
               <div className="glass-card h-full flex flex-col">
                 <div className="flex justify-between items-center mb-3">
@@ -424,7 +478,7 @@ export function HomePage({ setPage }: HomePageProps) {
             </FadeIn>
           ))}
         </div>
-        <div className="text-center mt-8">
+        <div className="hidden md:block text-center mt-8">
           <button
             onClick={() => { setPage('Reviews'); window.scrollTo(0,0); }}
             className="relative group inline-flex items-center gap-3 px-12 py-4 text-sm sm:text-base tracking-[0.2em] uppercase transition-all duration-500 hover:tracking-[0.25em]"
