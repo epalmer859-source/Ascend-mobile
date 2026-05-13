@@ -170,7 +170,7 @@ export function ComparePage({ setPage }: ComparePageProps) {
     <div>
       {/* Hero */}
       <section
-        className="min-h-[80vh] flex flex-col items-center justify-center text-center px-6 py-36 relative"
+        className="min-h-[80vh] flex flex-col items-center justify-center text-center px-6 py-36 relative compare-hero"
         style={{
           background: 'linear-gradient(180deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.75) 100%), url(/compare-hero-bg.png) center/contain no-repeat, black'
         }}

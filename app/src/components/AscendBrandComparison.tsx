@@ -5,7 +5,7 @@ import { Check, X } from 'lucide-react';
 const TUBE_PATH =
   'M17 8h14v6l4 8v42a4 4 0 01-4 4H17a4 4 0 01-4-4V22l4-8V8z';
 
-/** Same rows as About “Reality Check” — MOST BRANDS vs ASCEND by variable. */
+/** Same rows as About "Reality Check" — MOST BRANDS vs ASCEND by variable. */
 export const ASCEND_BRAND_COMPARISON_ROWS: { label: string; mostBrands: boolean }[] = [
   { label: 'Excess Oil', mostBrands: false },
   { label: 'Clogged Pores', mostBrands: true },
@@ -76,7 +76,7 @@ function GenericBottleSilhouette({ className }: { className?: string }) {
   );
 }
 
-/** Three-phase lineup: same tube silhouette as “most brands,” gold, vector-only (no photo). */
+/** Three-phase lineup: same tube silhouette as "most brands," gold, vector-only (no photo). */
 function AscendThreeTubesIcon({ className }: { className?: string }) {
   return (
     <svg
@@ -142,13 +142,72 @@ export function AscendBrandComparison({
         </div>
       )}
 
+      {/* Mobile: card-based layout */}
+      <div className="sm:hidden mx-auto max-w-md space-y-3 px-1">
+        {/* Header card */}
+        <div className="rounded-xl border border-white/[0.1] bg-gradient-to-b from-[#141414] to-[#0a0a0a] p-5">
+          <p className="text-center text-[15px] font-semibold text-white mb-5" style={{ fontFamily: 'var(--header)' }}>
+            Why choose <span className="text-[var(--gold)]">ASCEND</span>?
+          </p>
+          <div className="flex items-end justify-around">
+            <div className="flex flex-col items-center gap-2">
+              <GenericBottleSilhouette className="h-14 w-10 text-[#d4cfc8]" />
+              <span className="text-[9px] font-bold tracking-[0.14em] text-[#d4cfc8]" style={{ fontFamily: 'var(--header)' }}>MOST BRANDS</span>
+            </div>
+            <div className="flex flex-col items-center gap-2">
+              <span className="text-white/30 text-xl font-light">vs</span>
+            </div>
+            <div className="flex flex-col items-center gap-2 relative">
+              <AscendThreeTubesIcon className="h-14 w-24 text-white drop-shadow-[0_4px_18px_rgba(226,205,185,0.22)]" />
+              <span className="text-[10px] font-bold tracking-[0.28em] text-[#E2CDB9]" style={{ fontFamily: 'var(--header)' }}>ASCEND</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Variable cards */}
+        {ASCEND_BRAND_COMPARISON_ROWS.map((row) => (
+          <div
+            key={row.label}
+            className="rounded-xl border border-white/[0.08] bg-gradient-to-r from-[#0e0e0e] to-[#0a0a0a] overflow-hidden"
+          >
+            <div className="px-4 pt-4 pb-2">
+              <span className="text-[15px] font-semibold text-white tracking-wide" style={{ fontFamily: 'var(--header)' }}>{row.label}</span>
+            </div>
+            <div className="flex">
+              <div className={`flex-1 flex items-center gap-2.5 px-4 py-3 ${row.mostBrands ? 'bg-white/[0.02]' : 'bg-white/[0.01]'}`}>
+                <div className="flex-shrink-0">
+                  {row.mostBrands ? <MutedOthersCheck /> : <GreyOthersX />}
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-[10px] font-bold tracking-[0.12em] text-white/30" style={{ fontFamily: 'var(--header)' }}>MOST BRANDS</span>
+                  <span className={`text-xs mt-0.5 ${row.mostBrands ? 'text-white/40' : 'text-white/25'}`}>
+                    {row.mostBrands ? 'Partial' : 'Ignored'}
+                  </span>
+                </div>
+              </div>
+              <div className="w-px bg-white/[0.06]" />
+              <div className="flex-1 flex items-center gap-2.5 px-4 py-3 relative overflow-hidden">
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#E2CDB9]/[0.04] to-transparent" aria-hidden />
+                <div className="flex-shrink-0 relative z-[1]">
+                  <GoldCheckCircle />
+                </div>
+                <div className="flex flex-col relative z-[1]">
+                  <span className="text-[10px] font-bold tracking-[0.12em] text-[#E2CDB9]/70" style={{ fontFamily: 'var(--header)' }}>ASCEND</span>
+                  <span className="text-xs mt-0.5 text-[#E2CDB9]/90">Controlled</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop/tablet: original table */}
       <div
-        className="mx-auto max-w-4xl overflow-x-auto rounded-2xl border border-white/[0.1] bg-gradient-to-b from-[#141414] to-[#070707] shadow-[0_12px_48px_rgba(0,0,0,0.5)]"
+        className="hidden sm:block mx-auto max-w-4xl overflow-x-auto rounded-2xl border border-white/[0.1] bg-gradient-to-b from-[#141414] to-[#070707] shadow-[0_12px_48px_rgba(0,0,0,0.5)]"
         role="region"
         aria-label="ASCEND compared to most brands"
       >
-        <div className="min-w-[min(100%,380px)] sm:min-w-0">
-          {/* Column headers: question | most brands (first “knockout”) | ascend (winner) */}
+        <div>
           <div className={`${GRID} border-b border-white/10`}>
             <div className="flex flex-col justify-center border-r border-white/10 px-4 py-5 sm:px-6 sm:py-6">
               <p
@@ -159,7 +218,6 @@ export function AscendBrandComparison({
               </p>
             </div>
 
-            {/* Middle: most brands — same deep fill as before; strokes/icons read a touch clearer */}
             <div className="flex flex-col items-center justify-end border-r border-white/10 bg-[#0a0a0a] px-2 py-5 sm:py-6">
               <GenericBottleSilhouette className="mb-3 h-[3.75rem] w-11 text-[#d4cfc8] sm:h-16 sm:w-12" />
               <span
@@ -170,7 +228,6 @@ export function AscendBrandComparison({
               </span>
             </div>
 
-            {/* Right: ASCEND — emphasis */}
             <div className="relative flex flex-col items-center justify-end overflow-hidden bg-[#0a0a0a] px-2 py-5 sm:py-6">
               <div
                 className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[var(--gold)]/[0.1] via-transparent to-transparent"
@@ -190,7 +247,6 @@ export function AscendBrandComparison({
             </div>
           </div>
 
-          {/* Rows */}
           {ASCEND_BRAND_COMPARISON_ROWS.map((row, i) => (
             <div
               key={row.label}

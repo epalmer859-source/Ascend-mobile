@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { FadeIn } from '@/components/FadeIn';
 import { ImageWithFallback } from '@/components/ImageWithFallback';
 import { Stars, RatingStars } from '@/components/Icons';
@@ -13,25 +14,25 @@ interface HomePageProps {
 }
 
 const modalData = [
-  { 
-    title: "Heat, Sweat, & Occlusion", 
-    text: "ASCEND manages heat- and sweat-driven congestion by clearing occluded buildup with salicylic acid while preserving an optimized cleansing-to-hydration ratio. Skin-identical ceramides, niacinamide, humectants, and copper tripeptide-1 (GHK-Cu) stabilize the barrier and moisture balance under sustained heat and occlusion.", 
-    icon: "bicep" 
+  {
+    title: "Heat, Sweat, & Occlusion",
+    text: "Phase I clears sweat, oil, and buildup with BHA + Sulfur, while Phase II restores hydration with a matte water-based gel that dries clean without grease, tack, or extra film.",
+    icon: "bicep"
   },
-  { 
-    title: "Bacteria & Inflammation", 
-    text: "ASCEND controls acne-causing bacteria and inflammation through a high-strength azelaic acid system supported by zinc regulation and sulfur's antimicrobial activity. This approach suppresses bacterial overgrowth within the pore while calming inflammation and supporting long-term skin clarity.", 
-    icon: "bacteria" 
+  {
+    title: "Bacteria & Inflammation",
+    text: "Phase I Sulfur and Phase III 15% Azelaic Acid help target acne-causing bacteria and inflammation without relying on the harsh burn of benzoyl peroxide.",
+    icon: "bacteria"
   },
-  { 
-    title: "Excess Oil & Clogged Pores", 
-    text: "ASCEND targets excess oil and clogged pores by regulating sebum production and normalizing pore turnover. Keratolytic actives clear existing buildup, while antimicrobial and oil-modulating components help prevent new congestion.", 
-    icon: "bottle" 
+  {
+    title: "Excess Oil & Clogged Pores",
+    text: "Phase I uses oil-soluble BHA to target pore-level buildup, Sulfur to help control oil, and Phase II to hydrate without adding shine or residue.",
+    icon: "bottle"
   },
-  { 
-    title: "Redness & Irritation", 
-    text: "ASCEND reduces redness and irritation by calming inflammatory pathways and reinforcing the skin barrier. Barrier-supporting components help the skin withstand repeated contact, shaving, and daily movement without triggering flare-ups, while balanced hydration keeps skin resilient under stress.", 
-    icon: "nosymbol" 
+  {
+    title: "Redness & Irritation",
+    text: "Phase II uses Bisabolol and barrier-focused humectants to calm visible irritation, while Phase III Azelaic Acid helps reduce the look of redness and post-acne marks.",
+    icon: "nosymbol"
   },
 ];
 
@@ -47,7 +48,16 @@ export function HomePage({ setPage }: HomePageProps) {
   const protocolScrollRef = useRef<HTMLDivElement>(null);
   const [protocolArrows, setProtocolArrows] = useState({ left: false, right: true });
   const [reviewIndex, setReviewIndex] = useState(0);
-  const homeReviews = [...getUserReviews().slice().reverse(), ...ALL_REVIEWS].slice(0, 6);
+  const homeReviews = [...getUserReviews().slice().reverse(), ...ALL_REVIEWS].slice(0, 10);
+
+  useEffect(() => {
+    if (modalOpen !== null) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [modalOpen]);
 
   const updateProtocolArrows = () => {
     const el = protocolScrollRef.current;
@@ -113,7 +123,7 @@ export function HomePage({ setPage }: HomePageProps) {
                   alt="ASCEND 3-Phase System"
                   decoding="async"
                   fetchPriority="high"
-                  className="hero-product-image w-full h-auto max-w-full object-contain"
+                  className="hero-product-image w-full h-auto max-w-full object-contain scale-[1.15] lg:scale-100"
                 />
               </div>
             </div>
@@ -211,7 +221,7 @@ export function HomePage({ setPage }: HomePageProps) {
           <div className="lg:hidden flex flex-col items-center text-center max-w-4xl mx-auto">
             <h2 className="text-3xl sm:text-4xl mb-6" style={{ fontFamily: 'var(--header)' }}>The ASCEND™ System</h2>
             <div className="flex justify-center items-center min-w-0 w-full mb-2">
-              <ImageWithFallback src="/ascend-3tubes.png?v=3" alt="ASCEND Phase I, II, III" className="w-full max-w-[320px] sm:max-w-[380px] object-contain" />
+              <ImageWithFallback src="/ascend-3tubes.png?v=3" alt="ASCEND Phase I, II, III" className="w-full max-w-[380px] sm:max-w-[420px] object-contain" />
             </div>
             <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-sm sm:text-base tracking-widest font-medium text-white mb-8">
               <span>PHASE I</span><span className="text-[#E2CDB9]">→</span>
@@ -356,14 +366,14 @@ export function HomePage({ setPage }: HomePageProps) {
       </section>
 
       {/* Modal */}
-      {modalOpen !== null && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+      {modalOpen !== null && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 overflow-hidden" style={{ touchAction: 'none' }}>
           <div
             className="absolute inset-0 bg-black/85 backdrop-blur-sm"
             onClick={() => setModalOpen(null)}
           />
           <div
-            className="relative bg-[#0a0a0a] border border-[#E2CDB9]/30 rounded-lg p-8 sm:p-10 max-w-xl w-full text-left"
+            className="relative bg-[#0a0a0a] border border-[#E2CDB9]/30 rounded-lg p-6 sm:p-10 max-w-xl w-full text-left"
           >
             <button
               onClick={() => setModalOpen(null)}
@@ -372,11 +382,11 @@ export function HomePage({ setPage }: HomePageProps) {
             >
               <X className="w-6 h-6" />
             </button>
-            <h3 className="text-2xl mb-4 text-[#E2CDB9]" style={{ fontFamily: 'var(--header)' }}>
+            <h3 className="text-2xl mb-5 text-[#E2CDB9]" style={{ fontFamily: 'var(--header)' }}>
               {modalData[modalOpen].title}
             </h3>
-            <div className="gold-divider w-48 mb-6" />
-            <p className="text-white leading-relaxed mb-8">
+            <div className="gold-divider w-48 my-5" />
+            <p className="text-white leading-relaxed mb-8" style={{ fontFamily: 'var(--header)', fontWeight: 400 }}>
               {modalData[modalOpen].text}
             </p>
             <div className="flex justify-center">
@@ -388,7 +398,8 @@ export function HomePage({ setPage }: HomePageProps) {
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* Reviews Section — user reviews + seeded so count updates in real time */}
@@ -442,16 +453,14 @@ export function HomePage({ setPage }: HomePageProps) {
             </button>
           </div>
 
-          {reviewIndex >= 2 && (
-            <div className="text-center mt-6">
-              <button
-                onClick={() => { setPage('Reviews'); window.scrollTo(0,0); }}
-                className="btn-gold text-sm"
-              >
-                See all {getUserReviews().length + ALL_REVIEWS.length} reviews <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
-          )}
+          <div className="text-center mt-6">
+            <button
+              onClick={() => { setPage('Reviews'); window.scrollTo(0,0); }}
+              className="btn-gold text-sm"
+            >
+              See all {getUserReviews().length + ALL_REVIEWS.length} reviews <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
         </div>
 
         {/* Desktop Grid */}

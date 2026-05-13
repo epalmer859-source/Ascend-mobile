@@ -613,3 +613,9 @@ input::placeholder, textarea::placeholder {
     touch-action: manipulation;
   }
 }
+
+@media (max-width: 767px) {
+  .compare-hero {
+    background-size: 150% !important;
+  }
+}
